@@ -10,7 +10,7 @@
 
 ### 파트 1. 주식 투자, 처음이라면 (완전 초보)
 
-- [ ] [1-1. 주식이란 무엇인가 — 회사 지분을 산다는 것의 의미](part1-basics/1-1-what-is-stock.md)
+- [x] [1-1. 주식이란 무엇인가 — 회사 지분을 산다는 것의 의미](part1-basics/1-1-what-is-stock.md)
 - [ ] [1-2. 증권계좌 개설, 어디서 어떻게 하나](part1-basics/1-2-open-brokerage-account.md)
 - [ ] [1-3. 주식 사는 법 — 호가창, 시장가/지정가 주문 이해하기](part1-basics/1-3-how-to-buy-stocks.md)
 - [ ] [1-4. 매매 시간과 장전·장후 거래](part1-basics/1-4-trading-hours.md)
