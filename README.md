@@ -14,7 +14,7 @@
 - [x] [1-2. 증권계좌 개설, 어디서 어떻게 하나](part1-basics/1-2-open-brokerage-account.md)
 - [x] [1-3. 주식 사는 법 — 호가창, 시장가/지정가 주문 이해하기](part1-basics/1-3-how-to-buy-stocks.md)
 - [x] [1-4. 매매 시간과 장전·장후 거래](part1-basics/1-4-trading-hours.md)
-- [ ] [1-5. 수수료와 세금, 주식 사고팔면 뭘 떼일까](part1-basics/1-5-fees-and-taxes.md)
+- [x] [1-5. 수수료와 세금, 주식 사고팔면 뭘 떼일까](part1-basics/1-5-fees-and-taxes.md)
 - [ ] [1-6. 시가총액·주가·거래량, 숫자 읽는 법](part1-basics/1-6-market-cap-price-volume.md)
 
 ### 파트 2. 국내 주식시장 이해하기
