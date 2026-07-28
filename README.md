@@ -21,7 +21,7 @@
 
 - [x] [2-1. 코스피 vs 코스닥, 뭐가 다른가](part2-korea-market/2-1-kospi-vs-kosdaq.md)
 - [x] [2-2. 코스피 지수는 어떻게 계산되나](part2-korea-market/2-2-how-kospi-index-works.md)
-- [ ] [2-3. 배당이란 — 배당락, 배당 기준일, 배당수익률](part2-korea-market/2-3-dividend-basics.md)
+- [x] [2-3. 배당이란 — 배당락, 배당 기준일, 배당수익률](part2-korea-market/2-3-dividend-basics.md)
 - [ ] [2-4. 공모주 청약, 어떻게 참여하나](part2-korea-market/2-4-ipo-subscription.md)
 - [ ] [2-5. 유상증자·무상증자·액면분할이 주가에 미치는 영향](part2-korea-market/2-5-capital-increase-and-split.md)
 - [ ] [2-6. 상한가·하한가·서킷브레이커 — 시장의 안전장치](part2-korea-market/2-6-price-limit-circuit-breaker.md)
