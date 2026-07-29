@@ -25,7 +25,7 @@
 - [x] [2-4. 공모주 청약, 어떻게 참여하나](part2-korea-market/2-4-ipo-subscription.md)
 - [x] [2-5. 유상증자·무상증자·액면분할이 주가에 미치는 영향](part2-korea-market/2-5-capital-increase-and-split.md)
 - [x] [2-6. 상한가·하한가·서킷브레이커 — 시장의 안전장치](part2-korea-market/2-6-price-limit-circuit-breaker.md)
-- [ ] [2-7. 공매도란 무엇이고 왜 논란인가](part2-korea-market/2-7-short-selling.md)
+- [x] [2-7. 공매도란 무엇이고 왜 논란인가](part2-korea-market/2-7-short-selling.md)
 
 ### 파트 3. 미국주식·해외투자
 
