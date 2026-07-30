@@ -212,9 +212,28 @@ VitePress 로컬 검색(MiniSearch 기반)을 쓰고, 색인용과 질의용에 
 
 브랜치 모델은 이 저장소가 써 온 `main` 단일 브랜치를 유지한다(전역 규칙의 release + develop 모델과 다르지만 기존 이력을 따른다). 사이트 구축 작업은 `feat/site` 브랜치에서 진행하고 PR로 `main`에 머지한다.
 
-### 12.3 전제조건
+### 12.3 도메인 연결 — 외부 DNS + CNAME
 
-- **`digestive-coffee.blog` 영역이 Cloudflare DNS에서 관리되고 있어야 한다.** 서브도메인을 Pages에 붙이려면 필요하다. 타 DNS를 쓰고 있다면 영역 이전 또는 CNAME 추가가 선행된다.
+`digestive-coffee.blog`의 DNS는 **호스팅kr에서 관리 중이며 Cloudflare로 이전하지 않는다.**
+
+Cloudflare Pages는 외부 DNS에 있는 도메인도 커스텀 도메인으로 받아주며, 단 **서브도메인만** 가능하다(apex 도메인은 네임서버를 Cloudflare로 옮겨야 한다). 우리 대상이 `stock-wiki.digestive-coffee.blog`이므로 이 방식이 그대로 적용된다.
+
+**네임서버 이전을 기각한 이유**: 이전 시 Cloudflare가 기존 레코드를 자동 임포트하지만 완전하지 않다. `digestive-coffee.blog`에 운영 중인 서비스나 메일(MX) 레코드가 있으면 끊길 위험이 있고, 서브도메인 하나를 붙이기 위해 감당할 위험이 아니다.
+
+**순서 의존성 — 반드시 지킬 것.** Cloudflare 문서가 명시적으로 경고하는 항목이다. Pages 대시보드에서 도메인을 먼저 등록하지 않고 CNAME만 만들면 도메인이 해석되지 않는다.
+
+1. GitHub 공개 저장소 생성 → 푸시
+2. Cloudflare Pages 프로젝트 생성 (GitHub 연동)
+3. **Pages 대시보드 → 커스텀 도메인에 `stock-wiki.digestive-coffee.blog` 추가**
+4. 호스팅kr DNS에 CNAME 추가 — 대상: `<프로젝트명>.pages.dev`
+5. Cloudflare가 검증 후 SSL 인증서 자동 발급
+
+4단계의 이름 칸에 호스트명(`stock-wiki`)만 넣는지 FQDN 전체를 넣는지는 호스팅kr UI 규약에 따른다. 해당 단계에서 확인한다.
+
+근거: https://developers.cloudflare.com/pages/configuration/custom-domains/
+
+### 12.4 그 밖의 전제조건
+
 - Node는 nvm에 v22.23.1 / v24.15.0이 설치되어 있으나 비대화형 셸에서 `node`가 잡히지 않는다. `.nvmrc`와 함께 빌드 경로를 명시해야 한다.
 
 ## 13. 완료 판정 기준
@@ -241,8 +260,7 @@ VitePress 로컬 검색(MiniSearch 기반)을 쓰고, 색인용과 질의용에 
 
 ## 15. 확인이 필요한 사항
 
-- **`digestive-coffee.blog`에 이미 다른 콘텐츠가 있는지.** 애드센스에 사이트를 추가할 때 상위 도메인 단위로 잡힐 가능성이 있어, 같은 도메인의 다른 콘텐츠가 심사 대상에 함께 들어갈 수 있다. 신청 전에 확인이 필요하다.
-- **Cloudflare DNS 영역 보유 여부** (12.3 전제조건).
+- **`digestive-coffee.blog`에 이미 다른 콘텐츠가 있는지.** 애드센스에 사이트를 추가할 때 상위 도메인 단위로 잡힐 가능성이 있어, 같은 도메인의 다른 콘텐츠가 심사 대상에 함께 들어갈 수 있다. 신청 전에 확인이 필요하다. (DNS 연결 자체는 12.3의 CNAME 방식으로 해결되어 더 이상 미해결 사항이 아니다.)
 
 ## 16. 다음 단계
 
