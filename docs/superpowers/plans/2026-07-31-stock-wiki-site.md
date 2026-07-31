@@ -52,6 +52,8 @@
 | `about/contact.md` | 문의 | 7 |
 | `public/robots.txt` | 크롤러 지침 | 8 |
 | `public/ads.txt` | 애드센스 발행자 선언 (승인 후 채움) | 8 |
+| `tests/helpers/search-index.js` | 검색 색인 모형 (테스트·측정 스크립트 공용) | 4 |
+| `scripts/measure-search.js` | 합성어 내부 일치 측정 — 판정하지 않고 표만 출력 | 4 |
 | `tests/unit/*.test.js` | 빌드 없이 도는 단위 테스트 | 2·3·4·6 |
 | `tests/build/*.test.js` | `.vitepress/dist`를 검사하는 산출물 테스트 | 1·8 |
 
@@ -862,7 +864,7 @@ git commit -m "feat(site): 미집필 챕터 링크 비활성화 및 데드링크
 설계 7.2에 따라 커스텀 색인 토크나이저는 넣지 않는다. 대신 지금까지 검색에 전혀 쓰이지 않던 frontmatter `keywords`를 색인에 넣고, 실제로 어떤 질의가 새는지 **측정해서 기록**한다.
 
 **Files:**
-- Create: `.vitepress/lib/search-render.js`, `tests/unit/search-render.test.js`, `tests/unit/search-recall.test.js`
+- Create: `.vitepress/lib/search-render.js`, `tests/helpers/search-index.js`, `tests/unit/search-render.test.js`, `tests/unit/search-recall.test.js`, `scripts/measure-search.js`
 - Modify: `.vitepress/config.js`
 
 **Interfaces:**
@@ -870,6 +872,7 @@ git commit -m "feat(site): 미집필 챕터 링크 비활성화 및 데드링크
 - Produces:
   - `search-render.js` → `export function injectKeywords(html, keywords): string` — 순수 문자열 변환. 첫 `</h1>` 뒤에 keywords 문단을 넣고, `<h1>`이 없으면 맨 앞에 넣는다.
   - `search-render.js` → `export function renderForSearch(src, env, md): string` — VitePress `search.options._render`에 그대로 넘길 함수
+  - `tests/helpers/search-index.js` → `export function buildSearchModel(): { docCount: number, search: (q: string) => string[] }`, `export const SEARCH_OPTIONS`
 
 - [ ] **Step 1: 주입 함수의 실패하는 테스트를 작성한다**
 
@@ -1001,21 +1004,28 @@ import { renderForSearch } from './lib/search-render.js'
 
 색인·질의 옵션은 건드리지 않는다. VitePress 기본값 `{ fuzzy: 0.2, prefix: true, boost: { title: 4, text: 2, titles: 1 } }`이 조사 문제를 이미 해결한다(설계 7.0).
 
-- [ ] **Step 6: 재현율 측정 테스트를 작성한다**
+- [ ] **Step 6: 색인 모형 헬퍼를 만든다**
 
-이 테스트는 VitePress가 만드는 인덱스 자체가 아니라, **같은 필드 구성과 같은 검색 옵션을 쓴 MiniSearch 인덱스**를 실제 챕터 본문으로 만들어 돌린다. 토큰화와 접두어 매칭 동작을 확인하는 것이 목적이며, 최종 확인은 Step 8의 브라우저 검증이다.
+VitePress가 만드는 인덱스 자체가 아니라, **같은 필드 구성과 같은 검색 옵션을 쓴 MiniSearch 인덱스**를 실제 챕터 본문으로 만든다. 토큰화와 접두어 매칭 동작을 확인하는 것이 목적이며, 최종 확인은 Step 9의 브라우저 검증이다.
 
-`tests/unit/search-recall.test.js`:
+테스트(Step 7)와 측정 스크립트(Step 8)가 둘 다 쓰므로 헬퍼로 분리한다.
+
+`tests/helpers/search-index.js`:
 
 ```js
-import { test } from 'node:test'
-import assert from 'node:assert/strict'
 import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import MiniSearch from 'minisearch'
 
 const ROOT = new URL('../../', import.meta.url).pathname
 const PART_DIRS = ['part1-basics', 'part2-korea-market']
+
+/** VitePress 로컬 검색의 기본 searchOptions (VPLocalSearchBox.vue 기준) */
+export const SEARCH_OPTIONS = {
+  fuzzy: 0.2,
+  prefix: true,
+  boost: { title: 4, text: 2, titles: 1 }
+}
 
 /** frontmatter를 떼고 본문만, 마크다운 기호는 러프하게 제거한다. */
 function loadChapters() {
@@ -1044,23 +1054,40 @@ function loadChapters() {
   return docs
 }
 
-const index = new MiniSearch({
-  fields: ['title', 'titles', 'text'],
-  storeFields: ['file']
+/**
+ * 챕터 본문으로 색인을 만들고 검색 함수를 돌려준다.
+ * @returns {{ docCount: number, search: (q: string) => string[] }}
+ */
+export function buildSearchModel() {
+  const docs = loadChapters()
+  const index = new MiniSearch({
+    fields: ['title', 'titles', 'text'],
+    storeFields: ['file']
+  })
+  index.addAll(docs)
+  return {
+    docCount: docs.length,
+    search: (q) => index.search(q, SEARCH_OPTIONS).map((r) => r.file)
+  }
+}
+```
+
+- [ ] **Step 7: 조사 부착 케이스 테스트를 작성한다**
+
+`tests/unit/search-recall.test.js`:
+
+```js
+import { test } from 'node:test'
+import assert from 'node:assert/strict'
+import { buildSearchModel } from '../helpers/search-index.js'
+
+const model = buildSearchModel()
+
+test('색인에 완성된 13개 챕터가 모두 들어간다', () => {
+  assert.equal(model.docCount, 13)
 })
-index.addAll(loadChapters())
 
-const SEARCH_OPTIONS = {
-  fuzzy: 0.2,
-  prefix: true,
-  boost: { title: 4, text: 2, titles: 1 }
-}
-
-function search(q) {
-  return index.search(q, SEARCH_OPTIONS).map((r) => r.file)
-}
-
-// 반드시 통과해야 하는 케이스 — 조사가 붙은 본문을 잡는가
+// 조사가 붙은 본문을 잡는가 — 설계 7.4의 통과 필수 케이스
 for (const [query, expected] of [
   ['공매도', 'part2-korea-market/2-7-short-selling.md'],
   ['배당락', 'part2-korea-market/2-3-dividend-basics.md'],
@@ -1068,7 +1095,7 @@ for (const [query, expected] of [
   ['액면분할', 'part2-korea-market/2-5-capital-increase-and-split.md']
 ]) {
   test(`조사 부착 케이스: "${query}" → ${expected}`, () => {
-    const hits = search(query)
+    const hits = model.search(query)
     assert.ok(hits.length > 0, `"${query}" 검색 결과가 없습니다`)
     assert.ok(
       hits.slice(0, 3).includes(expected),
@@ -1076,29 +1103,48 @@ for (const [query, expected] of [
     )
   })
 }
-
-// 측정 대상 케이스 — 통과가 아니라 결과 기록이 목적이다 (설계 7.4)
-test('합성어 내부 일치 측정', () => {
-  const report = []
-  for (const query of ['거래소', '증자', '수수료']) {
-    report.push(`  ${query}: ${search(query).length}건 → ${search(query).slice(0, 3).join(', ') || '없음'}`)
-  }
-  console.log('\n[합성어 내부 일치 측정 결과]\n' + report.join('\n'))
-  assert.ok(true) // 판정하지 않는다. 기록이 목적이다.
-})
 ```
 
-- [ ] **Step 7: minisearch를 설치하고 측정 테스트를 돌린다**
+- [ ] **Step 8: 측정 스크립트를 만들고 돌린다**
+
+합성어 내부 일치는 **판정 대상이 아니라 측정 대상**이다(설계 7.4). 통과·실패가 없으므로 테스트가 아니라 스크립트로 만든다.
+
+`scripts/measure-search.js`:
+
+```js
+import { buildSearchModel } from '../tests/helpers/search-index.js'
+
+const QUERIES = ['거래소', '증자', '수수료']
+const model = buildSearchModel()
+
+console.log(`색인 문서 ${model.docCount}건 기준\n`)
+console.log('| 질의 | 결과 건수 | 상위 3건 |')
+console.log('|---|---|---|')
+for (const q of QUERIES) {
+  const hits = model.search(q)
+  console.log(`| ${q} | ${hits.length} | ${hits.slice(0, 3).join(', ') || '없음'} |`)
+}
+```
+
+`package.json`의 `scripts`에 추가한다.
+
+```json
+    "measure:search": "node scripts/measure-search.js"
+```
+
+minisearch를 설치하고 테스트와 측정을 차례로 돌린다.
 
 ```bash
-export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" && nvm use && npm install -D minisearch && node --test tests/unit/search-recall.test.js
+export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" && nvm use && npm install -D minisearch \
+  && node --test tests/unit/search-recall.test.js \
+  && npm run measure:search
 ```
 
-기대: 조사 부착 4개 케이스가 PASS. 합성어 측정 결과가 콘솔에 출력된다.
+기대: 테스트 5개 PASS. 측정 스크립트가 마크다운 표를 출력한다.
 
 **조사 케이스가 하나라도 실패하면** 설계 7.0의 전제가 틀린 것이다. 임의로 토크나이저를 넣지 말고 실패한 질의와 실제 상위 결과를 보고한 뒤 판단을 받는다.
 
-- [ ] **Step 8: 브라우저에서 실제 검색을 확인한다**
+- [ ] **Step 9: 브라우저에서 실제 검색을 확인한다**
 
 ```bash
 export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" && nvm use && npm run build && npm run preview
@@ -1113,14 +1159,14 @@ export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" && nvm use && npm run build &
 
 확인 후 서버를 종료한다.
 
-- [ ] **Step 9: 측정 결과를 계획서에 기록한다**
+- [ ] **Step 10: 측정 결과를 계획서에 기록한다**
 
-Step 7의 합성어 측정 결과를 이 파일 맨 아래 「검색 재현율 측정 결과」 절에 적는다. Task 10에서 `handoffs.md`로 옮긴다.
+Step 8의 합성어 측정 결과를 이 파일 맨 아래 「검색 재현율 측정 결과」 절에 적는다. Task 10에서 `handoffs.md`로 옮긴다.
 
-- [ ] **Step 10: 커밋**
+- [ ] **Step 11: 커밋**
 
 ```bash
-git add .vitepress/lib/search-render.js .vitepress/config.js tests/unit/search-render.test.js tests/unit/search-recall.test.js package.json package-lock.json docs/superpowers/plans/2026-07-31-stock-wiki-site.md
+git add .vitepress/lib/search-render.js .vitepress/config.js tests/helpers/search-index.js tests/unit/search-render.test.js tests/unit/search-recall.test.js scripts/measure-search.js package.json package-lock.json docs/superpowers/plans/2026-07-31-stock-wiki-site.md
 git commit -m "feat(site): 검색 색인에 frontmatter keywords 주입 및 재현율 측정
 
 VitePress는 title/titles/text만 색인해서 챕터마다 적어둔 실제 검색어가
@@ -2275,7 +2321,7 @@ Pages 프로젝트명, `*.pages.dev` 주소, 배포 확인 일시를 이 계획�
 | 1 | 빌드 성공, 깨진 링크 0 | `npm run build` | |
 | 2 | 산출물에 내부 문서 없음 | `npm test` (`tests/build/output.test.js`) | |
 | 3 | mermaid 4건 실제 렌더 | Task 5 Step 6의 표 | |
-| 4 | 조사 케이스 검색 통과 + 합성어 측정 기록 | Task 4 Step 9의 기록 | |
+| 4 | 조사 케이스 검색 통과 + 합성어 측정 기록 | `npm test` + Task 4 Step 10의 기록 | |
 | 5 | 미집필 링크 14곳이 「집필 예정」 | `grep -o 'planned-link' .vitepress/dist/part*/*.html \| wc -l` | |
 | 6 | 사이드바에 39개, 활성 13개 | `npm test` (`tests/unit/sidebar.test.js`) + 육안 | |
 | 7 | 3단·다크모드·모바일 | 배포된 사이트 육안 | |
@@ -2331,7 +2377,7 @@ export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" && nvm use && npm run build &
 
 - [ ] **Step 4: 검색 측정 결과를 `handoffs.md`에 옮긴다**
 
-Task 4 Step 9에 기록한 합성어 내부 일치 측정 결과를 `handoffs.md`의 3장(주기적 재확인이 필요한 수치 목록) 아래에 새 절로 추가한다. 다음에 검색 개선을 검토할 때의 출발점이 된다.
+Task 4 Step 10에 기록한 합성어 내부 일치 측정 결과를 `handoffs.md`의 3장(주기적 재확인이 필요한 수치 목록) 아래에 새 절로 추가한다. 다음에 검색 개선을 검토할 때의 출발점이 된다.
 
 - [ ] **Step 5: 계획서의 결과 절을 모두 채웠는지 확인한다**
 
@@ -2375,7 +2421,7 @@ git push origin v0.3.0
 
 ## 검색 재현율 측정 결과
 
-*(Task 4 Step 9에서 채운다)*
+*(Task 4 Step 10에서 채운다)*
 
 조사 부착 케이스 (통과 필수):
 
