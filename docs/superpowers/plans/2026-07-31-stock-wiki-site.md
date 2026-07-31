@@ -74,7 +74,7 @@ VitePress를 세우고 빌드가 도는 상태까지 만든다. 이 태스크의
 - Produces:
   - `.vitepress/lib/site.js` → `export const SITE_URL: string`, `export const SITE_TITLE: string`, `export const SITE_DESCRIPTION: string`
   - `npm run build` → `.vitepress/dist/` 생성
-  - `npm test` → `node --test tests/`
+  - `npm test` → `node --test "tests/**/*.test.js"`
 
 - [ ] **Step 1: Node 버전을 고정하고 셸에서 잡히게 한다**
 
@@ -118,7 +118,7 @@ node_modules/
     "dev": "vitepress dev",
     "build": "vitepress build",
     "preview": "vitepress preview",
-    "test": "node --test tests/"
+    "test": "node --test \"tests/**/*.test.js\""
   },
   "devDependencies": {
     "vitepress": "1.6.4"
@@ -469,7 +469,7 @@ test('목차 데이터에 없는 파트 1~6 파일은 경고로 보고된다', (
 - [ ] **Step 3: 테스트를 돌려 실패를 확인한다**
 
 ```bash
-export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" && nvm use && node --test tests/unit/
+export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" && nvm use && node --test "tests/unit/**/*.test.js"
 ```
 
 기대: FAIL — `Cannot find module '.../.vitepress/lib/sidebar.js'`
@@ -555,7 +555,7 @@ export function buildSidebar({
 - [ ] **Step 5: 테스트를 돌려 전부 통과하는지 확인한다**
 
 ```bash
-export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" && nvm use && node --test tests/unit/
+export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" && nvm use && node --test "tests/unit/**/*.test.js"
 ```
 
 기대: 8개 테스트 모두 PASS.
