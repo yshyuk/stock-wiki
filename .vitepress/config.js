@@ -40,6 +40,17 @@ export default withMermaid(defineConfig({
   ],
 
   themeConfig: {
+    nav: [
+      { text: '목차', link: '/part1-basics/1-1-what-is-stock' },
+      { text: '이 책은', link: '/about/disclaimer' }
+    ],
+
+    footer: {
+      message:
+        '<a href="/about/privacy">개인정보처리방침</a> · <a href="/about/disclaimer">면책조항</a> · <a href="/about/contact">문의</a>',
+      copyright: '이 사이트의 글은 투자 권유가 아니에요. 제도와 세금은 바뀔 수 있어요.'
+    },
+
     sidebar: buildSidebar({ root: ROOT }),
     outline: { level: [2, 3], label: '이 페이지' },
     docFooter: { prev: '이전', next: '다음' },
