@@ -1,0 +1,24 @@
+/* 미집필 챕터 링크 — planned-links 플러그인이 만드는 표시 */
+.planned-link {
+  color: var(--vp-c-text-3);
+  cursor: not-allowed;
+  border-bottom: 1px dotted var(--vp-c-divider);
+}
+
+.planned-link::after {
+  content: ' (집필 예정)';
+  font-size: 0.85em;
+  color: var(--vp-c-text-3);
+}
+
+/* 검색 색인용으로만 주입한 keywords 문단은 화면에 보이지 않게 한다.
+   _render는 검색 인덱스에만 쓰이므로 실제로는 페이지에 나타나지 않지만,
+   방어적으로 숨겨 둔다. */
+.search-keywords {
+  display: none;
+}
+
+/* mermaid 다이어그램이 좁은 화면에서 잘리지 않게 한다 */
+.vp-doc .mermaid {
+  overflow-x: auto;
+}

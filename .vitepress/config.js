@@ -2,10 +2,11 @@ import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
 import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
-import { SITE_TITLE, SITE_DESCRIPTION } from './lib/site.js'
+import { SITE_TITLE, SITE_DESCRIPTION, ADSENSE_CLIENT } from './lib/site.js'
 import { buildSidebar } from './lib/sidebar.js'
 import { plannedLinks } from './lib/planned-links.js'
 import { renderForSearch } from './lib/search-render.js'
+import { midContentAd } from './lib/mid-content-ad.js'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 
@@ -21,6 +22,21 @@ export default withMermaid(defineConfig({
     'docs/**',
     '.superpowers/**',
     'node_modules/**'
+  ],
+
+  head: [
+    ...(ADSENSE_CLIENT
+      ? [
+          [
+            'script',
+            {
+              async: '',
+              crossorigin: 'anonymous',
+              src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`
+            }
+          ]
+        ]
+      : [])
   ],
 
   themeConfig: {
@@ -60,6 +76,7 @@ export default withMermaid(defineConfig({
   markdown: {
     config(md) {
       md.use(plannedLinks, { root: ROOT })
+      md.use(midContentAd, { minSections: 4, beforeSection: 3 })
     }
   }
 }))
