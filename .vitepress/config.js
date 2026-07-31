@@ -1,0 +1,21 @@
+import { defineConfig } from 'vitepress'
+import { SITE_TITLE, SITE_DESCRIPTION } from './lib/site.js'
+
+export default defineConfig({
+  lang: 'ko-KR',
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  cleanUrls: true,
+
+  // srcDir이 저장소 루트이므로, 제외하지 않으면 내부 작업 문서가 사이트에 실린다.
+  srcExclude: [
+    'README.md',
+    'docs/**',
+    '.superpowers/**',
+    'node_modules/**'
+  ],
+
+  // Task 3에서 planned-links 플러그인을 붙이면서 false로 되돌린다.
+  // 지금은 미집필 챕터를 가리키는 링크 14곳 때문에 빌드가 실패한다.
+  ignoreDeadLinks: true
+})
