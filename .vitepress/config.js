@@ -1,6 +1,7 @@
 import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
 import { defineConfig } from 'vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 import { SITE_TITLE, SITE_DESCRIPTION } from './lib/site.js'
 import { buildSidebar } from './lib/sidebar.js'
 import { plannedLinks } from './lib/planned-links.js'
@@ -8,7 +9,7 @@ import { renderForSearch } from './lib/search-render.js'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 
-export default defineConfig({
+export default withMermaid(defineConfig({
   lang: 'ko-KR',
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
@@ -61,4 +62,4 @@ export default defineConfig({
       md.use(plannedLinks, { root: ROOT })
     }
   }
-})
+}))
