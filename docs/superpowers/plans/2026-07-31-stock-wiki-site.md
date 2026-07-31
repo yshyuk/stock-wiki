@@ -1272,14 +1272,39 @@ export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" && nvm use && npm run preview
 
 - [ ] **Step 7: 커밋**
 
+커밋 메시지는 Step 5를 실제로 수행했는지에 따라 달라진다. **Step 5(브라우저 확인)를 실제로
+수행했고 네 다이어그램 모두 그림으로 렌더되는 것을 육안으로 확인한 경우에만** 아래처럼 "실제 렌더
+검증"이라고 쓴다:
+
 ```bash
 git add package.json package-lock.json .vitepress/config.js docs/superpowers/plans/2026-07-31-stock-wiki-site.md
 git commit -m "feat(site): mermaid 렌더링 지원 및 다이어그램 4건 실제 렌더 검증
 
 handoffs 8장이 넘긴 숙제를 해결했다. 1-1, 1-2, 2-4, 2-7의 다이어그램은
 지금까지 정적 문법 검사만 거쳤고 실제 렌더를 확인한 적이 없었다.
-검증 결과를 계획서에 기록했다."
+브라우저로 네 페이지를 열어 그림 렌더·한글 라벨·다크 모드·모바일
+가로 스크롤을 모두 확인했다. 검증 결과를 계획서에 기록했다."
 ```
+
+**Step 5를 수행하지 못한 경우(예: 비대화형 환경이라 브라우저를 열 수 없음)에는 "실제 렌더
+검증"이라고 쓰지 않는다.** 자동화로 확인한 범위(빌드 성공, 코드 블록이 플러그인 마운트 지점으로
+치환됨, mermaid 파서가 어디까지 통과했는지)와 확인하지 못한 범위(그림 렌더·한글 라벨·다크 모드·
+모바일 스크롤)를 명확히 구분해서 쓰고, handoffs 8장 숙제는 아직 해결되지 않았다고 명시한다:
+
+```bash
+git add package.json package-lock.json .vitepress/config.js docs/superpowers/plans/2026-07-31-stock-wiki-site.md
+git commit -m "feat(site): mermaid 렌더링 지원 추가 및 빌드 파이프라인 검증
+
+vitepress-plugin-mermaid로 config.js를 감싸 mermaid 렌더링을 지원하도록
+설정했다. 자동화로 확인한 것: 빌드 성공, 코드 블록이 플러그인 마운트
+지점으로 치환됨, mermaid 파서가 어디까지 통과하는지. 브라우저에서의
+실제 렌더·한글 라벨·다크 모드·모바일 가로 스크롤은 확인하지 않았다 —
+[사유]. handoffs 8장이 넘긴 숙제는 아직 해결되지 않았다; 브라우저
+세션에서의 확인이 남아 있다."
+```
+
+어느 쪽이든, 계획서의 「mermaid 렌더 검증 결과」 표에는 실제로 확인한 값만 적는다 — 커밋
+메시지와 표의 내용이 서로 모순되면 안 된다.
 
 ---
 
@@ -2350,8 +2375,8 @@ export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" && nvm use && npm run build &
 
 ### 해결된 숙제
 
-- **mermaid 다이어그램 4건 실제 렌더 검증 완료** — 1-1, 1-2, 2-4, 2-7. 그동안 정적 문법 검사만
-  거쳤던 것들이에요. 결과는 계획서의 「mermaid 렌더 검증 결과」 절에 있어요.
+*(Task 6~9를 진행하며 실제로 해결된 항목만 여기 채운다. mermaid 렌더 검증은 아직 해결되지
+않았으므로 「남은 사항」에 있다.)*
 
 ### 집필할 때 알아야 할 것
 
@@ -2368,6 +2393,16 @@ export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" && nvm use && npm run build &
 
 ### 남은 사항
 
+- **mermaid 다이어그램 4건 렌더 검증 — 자동화까지만 완료, 브라우저 확인 남음.** 1-1, 1-2, 2-4,
+  2-7 네 다이어그램이에요. 빌드 파이프라인은 확인했어요 — 빌드 성공, mermaid 코드 블록이 플러그인
+  마운트 지점으로 정상 치환됨(raw 코드 블록 0건), 네 다이어그램 소스 모두 mermaid 파서가 정점
+  생성 단계까지 도달한 뒤 DOM 부재로 인한 동일한 오류로 실패(다이어그램별 문법 오류가 아니라
+  Node에 DOM이 없어서 생기는 환경 제약으로 판단). 하지만 실제로 그림으로 보이는지, 한글 라벨이
+  안 깨지는지, 다크 모드 토글에 따라가는지, 375px 모바일 폭에서 잘리지 않고 가로 스크롤이 생기는지는
+  비대화형 환경이라 아직 확인 못 했어요. 브라우저가 있는 세션에서 `/part1-basics/1-1-what-is-stock`,
+  `/part1-basics/1-2-open-brokerage-account`, `/part2-korea-market/2-4-ipo-subscription`,
+  `/part2-korea-market/2-7-short-selling` 네 페이지를 열어 확인하는 게 남은 일이에요. 세부 내용은
+  계획서의 「mermaid 렌더 검증 결과」 절에 있어요.
 - **애드센스 미신청.** 광고 슬롯과 정책 페이지는 준비됐고, `.vitepress/lib/site.js`의
   `ADSENSE_CLIENT`와 `public/ads.txt`에 발행자 ID만 채우면 켜져요.
 - **`digestive-coffee.blog`에 다른 콘텐츠가 있는지 확인 필요.** 애드센스가 상위 도메인 단위로
