@@ -944,7 +944,8 @@ export function injectKeywords(html, keywords) {
   if (!keywords || keywords.length === 0) return html
   const block = `<p class="search-keywords">${escapeHtml(keywords.join(' '))}</p>`
   if (/<\/h1>/.test(html)) {
-    return html.replace(/<\/h1>/, `</h1>\n${block}`)
+    // 원본에 </h1> 뒤 개행이 있든 없든 block 뒤에는 정확히 하나의 개행만 남긴다.
+    return html.replace(/<\/h1>\n?/, `</h1>\n${block}\n`)
   }
   return `${block}\n${html}`
 }
