@@ -9,6 +9,7 @@
     "test": "node --test \"tests/**/*.test.js\""
   },
   "devDependencies": {
+    "markdown-it": "^15.0.0",
     "vitepress": "1.6.4"
   }
 }

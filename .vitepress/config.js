@@ -3,6 +3,7 @@ import { dirname, resolve } from 'node:path'
 import { defineConfig } from 'vitepress'
 import { SITE_TITLE, SITE_DESCRIPTION } from './lib/site.js'
 import { buildSidebar } from './lib/sidebar.js'
+import { plannedLinks } from './lib/planned-links.js'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 
@@ -29,7 +30,13 @@ export default defineConfig({
     sidebarMenuLabel: '목차'
   },
 
-  // Task 3에서 planned-links 플러그인을 붙이면서 false로 되돌린다.
-  // 지금은 미집필 챕터를 가리키는 링크 14곳 때문에 빌드가 실패한다.
-  ignoreDeadLinks: true
+  // 계획된 미집필 챕터 링크는 plannedLinks가 처리한다.
+  // 여기 걸리는 건 진짜 오타 링크이므로 빌드를 세운다.
+  ignoreDeadLinks: false,
+
+  markdown: {
+    config(md) {
+      md.use(plannedLinks, { root: ROOT })
+    }
+  }
 })
