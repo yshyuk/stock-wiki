@@ -17,7 +17,7 @@
 1. **`part1-basics/` ~ `part7-trends/` 안의 마크다운 파일을 수정하지 않는다.** 파트 3 집필이 별도 세션에서 병행되므로 충돌한다. 이 프로젝트의 제1 제약이다. 유일한 예외는 Task 5에서 mermaid 렌더가 실제로 깨진 경우의 다이어그램 문법 수정이다.
 2. **`README.md`도 수정하지 않는다.** 깃허브 진입점으로 유지하고 사이트에서는 제외한다.
 3. **모든 자체 작성 모듈은 `.js`(순수 JavaScript)로 쓴다.** TypeScript를 쓰지 않는다. `node --test`가 트랜스파일 없이 그대로 import할 수 있어야 테스트에 빌드 단계가 끼지 않는다. `package.json`의 `"type": "module"` 덕분에 `.js`가 그대로 ESM이다. 타입 힌트가 필요하면 JSDoc `/** @type {import('vitepress').UserConfig} */`을 쓴다.
-4. **사이트 URL은 `https://stock-wiki.digestive-coffee.blog`** — 상수 한 곳(`.vitepress/lib/site.js`의 `SITE_URL`)에만 두고 모든 곳에서 참조한다.
+4. **사이트 URL은 `https://stock-wiki.digestive-coffee.blog`** — 프로덕션 코드는 상수 한 곳(`.vitepress/lib/site.js`의 `SITE_URL`)에만 두고 모든 곳에서 참조한다. 예외 둘: `public/robots.txt`(정적 파일이라 import 불가)와 산출물 검사 테스트의 기대값(`SITE_URL`을 import해 조립하면 상수 자체가 잘못 바뀌어도 테스트가 함께 움직여 아무것도 못 잡는 동어반복이 되므로, 기대값은 상수와 독립적인 리터럴이어야 한다).
 5. **문의 이메일은 `yshyuk.63@gmail.com`.**
 6. **증권사 실명·순위를 쓰지 않는다.** 콘텐츠 집필 규칙이 사이트 부속 페이지(랜딩·정책)에도 그대로 적용된다.
 7. **톤은 해요체.** 기존 13개 챕터와 같은 목소리를 유지한다.

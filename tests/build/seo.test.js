@@ -11,6 +11,8 @@ test('sitemap.xml이 생성된다', () => {
   assert.ok(existsSync(path), 'sitemap.xml이 없습니다')
   const xml = readFileSync(path, 'utf8')
 
+  // 리터럴은 의도적이다. SITE_URL을 import해 조립하면 상수가 잘못 바뀌어도
+  // 기대값이 함께 움직여 동어반복이 되어 아무것도 검증하지 못한다.
   for (const url of [
     'https://stock-wiki.digestive-coffee.blog/part2-korea-market/2-7-short-selling',
     'https://stock-wiki.digestive-coffee.blog/about/privacy',
