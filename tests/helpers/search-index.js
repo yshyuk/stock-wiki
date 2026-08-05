@@ -1,9 +1,12 @@
-import { readFileSync, readdirSync } from 'node:fs'
+import { readFileSync, readdirSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import MiniSearch from 'minisearch'
+import { PARTS } from '../../.vitepress/lib/chapters.js'
 
 const ROOT = new URL('../../', import.meta.url).pathname
-const PART_DIRS = ['part1-basics', 'part2-korea-market']
+// chapters.js의 PARTS에서 파생한다. 하드코딩하면 새 파트(예: 파트 3)가 생겨도 measure:search가
+// 그 파트를 보지 못한 채 예전 13개 챕터만으로 재측정 결과를 만들어 낸다.
+const PART_DIRS = PARTS.map((p) => p.dir)
 
 /** VitePress 로컬 검색의 기본 searchOptions (VPLocalSearchBox.vue 기준) */
 export const SEARCH_OPTIONS = {
@@ -12,21 +15,48 @@ export const SEARCH_OPTIONS = {
   boost: { title: 4, text: 2, titles: 1 }
 }
 
+/**
+ * frontmatter의 `keywords`를 파싱한다. 인라인 배열(`keywords: ["a", "b"]`)과
+ * YAML 블록 시퀀스(`keywords:\n  - a\n  - b`) 둘 다 지원한다.
+ * @param {string} fmText frontmatter 블록 내부 텍스트 (--- 제외)
+ * @returns {string[]}
+ */
+function parseKeywords(fmText) {
+  if (!fmText) return []
+
+  const inline = fmText.match(/^keywords:\s*\[(.*)\]\s*$/m)
+  if (inline) {
+    return inline[1]
+      .split(',')
+      .map((s) => s.trim().replace(/^"|"$/g, ''))
+      .filter(Boolean)
+  }
+
+  const lines = fmText.split('\n')
+  const startIdx = lines.findIndex((l) => /^keywords:\s*$/.test(l))
+  if (startIdx === -1) return []
+
+  const keywords = []
+  for (let i = startIdx + 1; i < lines.length; i++) {
+    const m = lines[i].match(/^\s*-\s*(.+?)\s*$/)
+    if (!m) break
+    keywords.push(m[1].replace(/^"|"$/g, ''))
+  }
+  return keywords
+}
+
 /** frontmatter를 떼고 본문만, 마크다운 기호는 러프하게 제거한다. */
 function loadChapters() {
   const docs = []
   let id = 0
   for (const dir of PART_DIRS) {
+    if (!existsSync(join(ROOT, dir))) continue
     for (const file of readdirSync(join(ROOT, dir)).filter((f) => f.endsWith('.md'))) {
       const raw = readFileSync(join(ROOT, dir, file), 'utf8')
       const fm = raw.match(/^---\n([\s\S]*?)\n---\n/)
       const body = fm ? raw.slice(fm[0].length) : raw
       const title = fm?.[1].match(/^title:\s*"?(.*?)"?$/m)?.[1] ?? file
-      const kwLine = fm?.[1].match(/^keywords:\s*\[(.*)\]$/m)?.[1] ?? ''
-      const keywords = kwLine
-        .split(',')
-        .map((s) => s.trim().replace(/^"|"$/g, ''))
-        .filter(Boolean)
+      const keywords = parseKeywords(fm?.[1])
       docs.push({
         id: id++,
         file: `${dir}/${file}`,

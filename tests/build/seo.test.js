@@ -2,8 +2,10 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { CHAPTERS } from '../../.vitepress/lib/chapters.js'
 
 const DIST = new URL('../../.vitepress/dist/', import.meta.url).pathname
+const ROOT = new URL('../../', import.meta.url).pathname
 const CHAPTER = join(DIST, 'part2-korea-market/2-7-short-selling.html')
 
 test('sitemap.xml이 생성된다', () => {
@@ -23,9 +25,20 @@ test('sitemap.xml이 생성된다', () => {
   }
 })
 
-test('sitemap에 미집필 챕터가 들어가지 않는다', () => {
+test('sitemap은 원고가 있는 챕터만 담고, 없는 챕터는 담지 않는다', () => {
+  // 고정된 'part3-us-overseas' 문자열 대신 CHAPTERS + 실제 원고 존재 여부로 판단한다.
+  // 파트 3이 집필되는 순간에도 이 불변식은 계속 참이어야 한다.
   const xml = readFileSync(join(DIST, 'sitemap.xml'), 'utf8')
-  assert.equal(xml.includes('part3-us-overseas'), false)
+  const mismatches = []
+  for (const chapter of CHAPTERS) {
+    const mdExists = existsSync(join(ROOT, chapter.file))
+    const url = `https://stock-wiki.digestive-coffee.blog/${chapter.file.replace(/\.md$/, '')}`
+    const inSitemap = xml.includes(url)
+    if (mdExists !== inSitemap) {
+      mismatches.push(`${chapter.file}: 원고 존재=${mdExists}, sitemap 포함=${inSitemap}`)
+    }
+  }
+  assert.deepEqual(mismatches, [], `원고-sitemap 불일치: ${mismatches.join('; ')}`)
 })
 
 test('robots.txt가 sitemap을 가리킨다', () => {
