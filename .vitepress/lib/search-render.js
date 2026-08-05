@@ -33,5 +33,8 @@ export function injectKeywords(html, keywords) {
  */
 export function renderForSearch(src, env, md) {
   const html = md.render(src, env)
+  // VitePress의 기본 렌더 경로(_render 미지정 시)는 frontmatter.search === false인 페이지를
+  // 색인에서 빼는데, _render를 직접 넘기면 이 옵트아웃을 재구현하지 않는 한 사라진다.
+  if (env?.frontmatter?.search === false) return ''
   return injectKeywords(html, env?.frontmatter?.keywords)
 }

@@ -1,11 +1,18 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
+import { existsSync } from 'node:fs'
+import { join } from 'node:path'
 import { buildSearchModel } from '../helpers/search-index.js'
+import { CHAPTERS } from '../../.vitepress/lib/chapters.js'
 
+const ROOT = new URL('../../', import.meta.url).pathname
 const model = buildSearchModel()
 
-test('색인에 완성된 13개 챕터가 모두 들어간다', () => {
-  assert.equal(model.docCount, 13)
+test('색인에 원고가 있는 챕터가 모두, 그리고 그것만 들어간다', () => {
+  // 고정된 13이라는 숫자 대신 실제로 원고 파일이 존재하는 챕터 수와 비교한다.
+  // 파트 3이 집필되는 순간 13이 그대로 굳어 있으면 이 테스트가 거짓 실패를 낸다.
+  const writtenCount = CHAPTERS.filter((c) => existsSync(join(ROOT, c.file))).length
+  assert.equal(model.docCount, writtenCount)
 })
 
 // 조사가 붙은 본문을 잡는가 — 설계 7.4의 통과 필수 케이스
