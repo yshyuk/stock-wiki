@@ -52,7 +52,19 @@ test('frontmatter 자체가 없어도(env.frontmatter undefined) 광고를 넣�
   assert.doesNotMatch(html, /AdSlot/)
 })
 
-test('챕터 페이지(frontmatter.part가 숫자)는 기존과 동일하게 광고가 들어간다', () => {
+test('챕터 페이지(part·order 둘 다 숫자)는 기존과 동일하게 광고가 들어간다', () => {
   const html = render(withSections(4), { frontmatter: { part: 2, order: 7 } })
   assert.match(html, /AdSlot/)
+})
+
+test('part만 있고 order가 없으면 광고를 넣지 않는다', () => {
+  // seo.js의 isChapter는 part·order 둘 다 숫자여야 "챕터"로 본다. order가 빠지거나
+  // 잘못된 페이지는 이미 JSON-LD가 안 붙는 상태이므로, 광고만 붙으면 두 판정이 어긋난다.
+  const html = render(withSections(6), { frontmatter: { part: 3 } })
+  assert.doesNotMatch(html, /AdSlot/)
+})
+
+test('order가 숫자가 아니면(예: 문자열) 광고를 넣지 않는다', () => {
+  const html = render(withSections(6), { frontmatter: { part: 3, order: '1' } })
+  assert.doesNotMatch(html, /AdSlot/)
 })

@@ -3,16 +3,20 @@
  * 챕터가 70~130줄로 짧아서 상단·중간·하단 3개를 다 넣으면 본문 대비 광고가 과하다.
  * 섹션이 충분히 많은 문서에만 중간 광고를 넣는다.
  *
- * 챕터 페이지에만 적용한다 — `frontmatter.part`가 챕터 여부를 가리는 기존 신호다
- * (seo.js의 isChapter와 동일 기준). 정책 페이지(about/privacy, about/disclaimer 등)는
- * `##` 섹션이 여러 개여도 챕터 집필 의도로 만든 조건이 아니므로 광고가 붙지 않아야 한다.
+ * 챕터 페이지에만 적용한다 — `frontmatter.part`와 `order`가 둘 다 숫자인지가 챕터 여부를
+ * 가리는 기존 신호다 (seo.js의 isChapter와 동일 기준: 두 필드 다 숫자여야 한다). 정책
+ * 페이지(about/privacy, about/disclaimer 등)는 `##` 섹션이 여러 개여도 챕터 집필 의도로
+ * 만든 조건이 아니므로 광고가 붙지 않아야 한다. `order`가 빠지거나 잘못된 챕터도 같은 이유로
+ * 제외한다 — seo.js에서는 이미 "챕터 아님" 취급되어 JSON-LD가 안 붙는데 광고만 붙으면
+ * 두 판정이 어긋난다.
  *
  * @param {import('markdown-it')} md
  * @param {{ minSections?: number, beforeSection?: number }} opts
  */
 export function midContentAd(md, { minSections = 4, beforeSection = 3 } = {}) {
   md.core.ruler.push('mid_content_ad', (state) => {
-    if (typeof state.env?.frontmatter?.part !== 'number') return
+    const fm = state.env?.frontmatter
+    if (typeof fm?.part !== 'number' || typeof fm?.order !== 'number') return
 
     const h2Indexes = []
     state.tokens.forEach((token, i) => {

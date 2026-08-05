@@ -118,19 +118,24 @@
   (증상: `npm run build`가 해당 링크를 가리키며 dead link 오류로 실패 — 오타처럼 보이지만
   실제로는 링크 스타일 문제일 수 있어요.)
 - **`##` 섹션이 4개 이상이면 3번째 섹션 앞에 광고가 들어가요.** 섹션 구성을 짤 때 참고하세요.
-  (이 삽입은 `frontmatter.part`가 있는 챕터 페이지에만 적용돼요 — 정책 페이지는 대상이 아니에요.)
+  (이 삽입은 `frontmatter.part`와 `order`가 둘 다 숫자인 챕터 페이지에만 적용돼요 — 정책
+  페이지나 `order`가 빠진 페이지는 대상이 아니에요.)
 - **frontmatter의 `keywords`가 검색 색인에 들어가요.** 그동안은 쓰이지 않았는데 이제 실제
   검색어로 동작하니, 독자가 칠 법한 표현을 넣어 주세요.
 - **`description`은 검색 결과와 SNS 미리보기에 그대로 노출돼요.** 이미 그렇게 쓰고 있지만,
   앞으로도 문장으로 완결되게 써 주세요.
 - **`date`는 구조화 데이터의 `datePublished`가 돼요.**
-- **`part`·`order`·`title` 세 개는 frontmatter 필수예요.** 이 셋이 SEO 전체를 켜는
-  스위치입니다 — `part`와 `order`가 둘 다 숫자여야 그 페이지가 "챕터"로 인식되고, 그래야
-  `og:type=article`·`article:published_time`·JSON-LD(Article + BreadcrumbList)가 붙어요.
-  **하나라도 빠지면 빌드가 에러 없이 조용히 통과하면서 그 챕터는 `og:type=website`로,
-  `article:published_time` 없이, **JSON-LD 자체가 아예 없이** 나가요.** `title`이 빠지면
-  (part·order는 있어도) JSON-LD의 `headline`과 breadcrumb 마지막 항목의 `name`이 비어
-  Google이 무효로 처리해요. 셋 다 반드시 채우세요.
+- **`part`·`order`는 frontmatter 필수예요 — 이 둘이 SEO 전체를 켜는 스위치입니다.** 둘 다
+  숫자여야 그 페이지가 "챕터"로 인식되고, 그래야 `og:type=article`·`article:published_time`·
+  JSON-LD(Article + BreadcrumbList)가 붙고 본문 중간 광고도 그 판정을 따라가요.
+  **둘 중 하나라도 빠지면 빌드가 에러 없이 조용히 통과하면서 그 챕터는 `og:type=website`로,
+  `article:published_time` 없이, JSON-LD 자체가 아예 없이 나가요.** 사이드바에도 안 나오니
+  chapters.js와 파일명이 일치하는지도 같이 확인하세요.
+  `title`은 필수는 아니고 권장이에요 — 빠지면 VitePress가 문서의 첫 `#` 제목으로,
+  그것도 없으면 사이트 이름으로 자동 대체하기 때문에 JSON-LD의 `headline`이나 breadcrumb가
+  비는 일은 없어요. 그래도 frontmatter `title`을 명시적으로 채우는 걸 권해요 — `<title>`
+  태그·`og:title`·JSON-LD `headline`에 그대로 쓰이는 값이라, frontmatter로 직접 정하는 쪽이
+  자동 추출보다 정확하게 통제돼요.
 - 챕터를 새로 쓰면 `.vitepress/lib/chapters.js`의 목차 데이터와 파일명이 일치하는지 확인하세요.
   불일치하면 사이드바에 안 나오거나 빈 항목이 생겨요.
 
