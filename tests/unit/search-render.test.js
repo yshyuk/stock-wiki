@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { injectKeywords } from '../../.vitepress/lib/search-render.js'
+import { injectKeywords, renderForSearch } from '../../.vitepress/lib/search-render.js'
 
 test('첫 h1 뒤에 keywords 문단을 넣는다', () => {
   const html = '<h1>공매도란</h1>\n<p>본문</p>'
@@ -30,4 +30,16 @@ test('두 번째 h1이 있어도 첫 번째에만 넣는다', () => {
 test('HTML 특수문자가 든 keywords를 이스케이프한다', () => {
   const out = injectKeywords('<h1>A</h1>', ['S&P500 <지수>'])
   assert.match(out, /S&amp;P500 &lt;지수&gt;/)
+})
+
+test('frontmatter.search가 false면 빈 문자열을 돌려준다 (색인 제외)', () => {
+  const fakeMd = { render: () => '<h1>제목</h1><p>본문</p>' }
+  const out = renderForSearch('# 제목\n\n본문', { frontmatter: { search: false } }, fakeMd)
+  assert.equal(out, '')
+})
+
+test('frontmatter.search가 false가 아니면 평소대로 렌더한다', () => {
+  const fakeMd = { render: () => '<h1>제목</h1><p>본문</p>' }
+  const out = renderForSearch('# 제목\n\n본문', { frontmatter: {} }, fakeMd)
+  assert.equal(out, '<h1>제목</h1><p>본문</p>')
 })
