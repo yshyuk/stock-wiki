@@ -111,19 +111,43 @@
 
 - **마크다운은 그대로 두면 돼요.** 사이트가 빌드 시점에 변형을 처리해요. 미집필 챕터를 가리키는
   링크를 미리 써 둬도 「집필 예정」 표시로 렌더되고, 그 챕터를 쓰면 자동으로 링크가 살아나요.
+  **단, 그 링크는 반드시 상대경로이고 `.md`로 끝나야 해요** (예: `../part3-us-overseas/3-2-us-trading-hours.md`).
+  `about/*.md`나 `index.md`에 쓰인 `/about/disclaimer` 같은 절대경로·확장자 없는 스타일을
+  아직 쓰지 않은 챕터 링크에 그대로 갖다 쓰면 안 됩니다 — 그 스타일은 `plannedLinks`가
+  「집필 예정」으로 인식하지 못해서 `ignoreDeadLinks: false` 설정 때문에 **빌드가 죽어요**.
+  (증상: `npm run build`가 해당 링크를 가리키며 dead link 오류로 실패 — 오타처럼 보이지만
+  실제로는 링크 스타일 문제일 수 있어요.)
 - **`##` 섹션이 4개 이상이면 3번째 섹션 앞에 광고가 들어가요.** 섹션 구성을 짤 때 참고하세요.
+  (이 삽입은 `frontmatter.part`가 있는 챕터 페이지에만 적용돼요 — 정책 페이지는 대상이 아니에요.)
 - **frontmatter의 `keywords`가 검색 색인에 들어가요.** 그동안은 쓰이지 않았는데 이제 실제
   검색어로 동작하니, 독자가 칠 법한 표현을 넣어 주세요.
 - **`description`은 검색 결과와 SNS 미리보기에 그대로 노출돼요.** 이미 그렇게 쓰고 있지만,
   앞으로도 문장으로 완결되게 써 주세요.
 - **`date`는 구조화 데이터의 `datePublished`가 돼요.**
+- **`part`·`order`·`title` 세 개는 frontmatter 필수예요.** 이 셋이 SEO 전체를 켜는
+  스위치입니다 — `part`와 `order`가 둘 다 숫자여야 그 페이지가 "챕터"로 인식되고, 그래야
+  `og:type=article`·`article:published_time`·JSON-LD(Article + BreadcrumbList)가 붙어요.
+  **하나라도 빠지면 빌드가 에러 없이 조용히 통과하면서 그 챕터는 `og:type=website`로,
+  `article:published_time` 없이, **JSON-LD 자체가 아예 없이** 나가요.** `title`이 빠지면
+  (part·order는 있어도) JSON-LD의 `headline`과 breadcrumb 마지막 항목의 `name`이 비어
+  Google이 무효로 처리해요. 셋 다 반드시 채우세요.
 - 챕터를 새로 쓰면 `.vitepress/lib/chapters.js`의 목차 데이터와 파일명이 일치하는지 확인하세요.
   불일치하면 사이드바에 안 나오거나 빈 항목이 생겨요.
 
 ### 남은 사항
 
-- **애드센스 미신청.** 광고 슬롯과 정책 페이지는 준비됐고, `.vitepress/lib/site.js`의
-  `ADSENSE_CLIENT`와 `public/ads.txt`에 발행자 ID만 채우면 켜져요.
+- **애드센스 미신청.** 광고 슬롯과 정책 페이지는 준비됐지만, `.vitepress/lib/site.js`의
+  `ADSENSE_CLIENT`와 `public/ads.txt`에 발행자 ID를 채우는 것만으로는 광고가 게재되지
+  않아요. 추가로 필요한 것:
+  - **슬롯별 ad-unit ID(`data-ad-slot`)가 없어요.** `AdSlot.vue`는 발행자 ID(`data-ad-client`)만
+    넣고 있고 광고 단위 ID는 아예 비어 있어요. AdSense는 이 값 없이는 게재를 시작하지 않으니,
+    계정을 만들고 top/mid/bottom 슬롯마다 ad-unit을 발급받아 `AdSlot.vue`에 넣어야 해요.
+  - **top/bottom 슬롯이 SPA 네비게이션에서 리필되지 않아요.** 이 두 슬롯이 마운트되는
+    컴포넌트는 클라이언트 사이드 라우팅 시 재생성되지 않아서, 첫 하드 로드 이후 페이지를
+    이동하면 광고가 다시 채워지지 않아요. mid 슬롯은 페이지 컴포넌트 안에 있어 이 문제가
+    없고요 — 셋이 서로 다르게 동작한다는 뜻이니 켜기 전에 라우트 변경 감지 로직을 추가하세요.
+  - 두 이슈 모두 `AdSlot.vue` 상단 주석에 자세히 적어 뒀어요. AdSense 계정이 없어 실제
+    슬롯 ID도 리필 동작도 테스트할 수 없었던 게 지금 단계에서 구현하지 않은 이유예요.
 - **`digestive-coffee.blog`에 다른 콘텐츠가 있는지 확인 필요.** 애드센스가 상위 도메인 단위로
   심사할 가능성이 있어요.
 - **`images/` 폴더 7개는 여전히 비어 있어요.** 첫 이미지가 규약(파일명·대체 텍스트·저장 경로)의
