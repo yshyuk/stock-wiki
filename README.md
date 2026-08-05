@@ -29,7 +29,7 @@
 
 ### 파트 3. 미국주식·해외투자
 
-- [ ] [3-1. 미국주식, 왜 하는가 — 국내주식과의 차이](part3-us-overseas/3-1-why-us-stocks.md)
+- [x] [3-1. 미국주식, 왜 하는가 — 국내주식과의 차이](part3-us-overseas/3-1-why-us-stocks.md)
 - [ ] [3-2. 미국주식 거래 시간과 프리마켓·애프터마켓](part3-us-overseas/3-2-us-trading-hours.md)
 - [ ] [3-3. 미국주식 세금 — 양도소득세 250만원 공제 이해하기](part3-us-overseas/3-3-us-stock-tax.md)
 - [ ] [3-4. 환율과 환전 — 환헤지 vs 환노출](part3-us-overseas/3-4-exchange-rate.md)
