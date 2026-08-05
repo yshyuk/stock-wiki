@@ -2544,26 +2544,35 @@ git push origin v0.3.0
 
 ## 배포 정보
 
-*(Task 9 Step 9에서 채운다)*
+Task 9 Step 3~9는 대시보드 조작이 필요해 사용자가 직접 진행했고, 프로젝트명·임시 주소를 별도로
+기록한 산출물이 없었다. Task 10에서 `dig`/`host`/`curl`로 직접 재확인해 채운다.
 
-- Cloudflare Pages 프로젝트명:
-- 임시 주소(`*.pages.dev`):
-- 커스텀 도메인 Active 확인 일시:
+- **Cloudflare Pages 프로젝트명**: `stock-wiki` — `host stock-wiki.digestive-coffee.blog` 결과
+  `is an alias for stock-wiki.pages.dev.`로 확인.
+- **임시 주소(`*.pages.dev`)**: `https://stock-wiki.pages.dev` — `curl -o /dev/null -w '%{http_code}'`
+  결과 `200` (2026-08-05 재확인).
+- **커스텀 도메인 Active 확인 일시**: 2026-08-04 07:18 UTC (Task 9에서 컨트롤러가 확인한 인증서
+  발급 시각 — Google Trust Services WE1, 만료 2026-11-02, 자동 갱신). `https://stock-wiki.digestive-coffee.blog`
+  는 2026-08-05 재확인 시점에도 HTTP/2 200을 반환하며, 사이트맵 17개 URL이 모두 커스텀 도메인
+  기준으로 생성된다.
 
 ---
 
 ## 완료 판정 결과
 
-*(Task 10 Step 1에서 채운다)*
+2026-08-05, Task 10에서 직접 재실행해 확인. `npm run build`, `npm test` 모두 이 세션에서
+새로 돌린 결과다.
 
 | # | 기준 | 결과 |
 |---|---|---|
-| 1 | 빌드 성공, 깨진 링크 0 | |
-| 2 | 산출물에 내부 문서 없음 | |
-| 3 | mermaid 4건 실제 렌더 | |
-| 4 | 검색 조사 케이스 통과 + 합성어 측정 기록 | |
-| 5 | 미집필 링크 14곳 「집필 예정」 | |
-| 6 | 사이드바 39개, 활성 13개 | |
-| 7 | 3단·다크모드·모바일 | |
-| 8 | 정책 페이지 3개 푸터 연결 | |
-| 9 | sitemap 완전성 | |
+| 1 | 빌드 성공, 깨진 링크 0 | **PASS.** `npm run build` → `vitepress build` 성공, `build complete in 3.77s`. 데드링크 검사(VitePress 자체 `dead link` 오류)는 0건 — 빌드 로그에 링크 오류 없이 `rendering pages... ✓`, `generating sitemap... ✓`로 종료. 청크 크기 경고 1건은 성능 권고일 뿐 실패가 아님. |
+| 2 | 산출물에 내부 문서 없음 | **PASS.** `npm test`의 `tests/build/output.test.js` — "내부 작업 문서가 산출물에 포함되지 않는다" 포함 4개 서브테스트 전부 `ok`. |
+| 3 | mermaid 4건 실제 렌더 | **PASS.** 2026-08-04 사이트 소유자가 브라우저에서 1-1·1-2·2-4·2-7 네 다이어그램을 직접 확인 — 전부 그림으로 정상 렌더, 한글 라벨 정상, 1-1 화살표 라벨 4개 정상. 계획서 「mermaid 렌더 검증 결과」절에 근거 기록됨. |
+| 4 | 검색 조사 케이스 통과 + 합성어 측정 기록 | **PASS.** `npm test`의 `tests/unit/search-recall.test.js` — 조사 부착 4케이스(공매도·배당락·서킷브레이커·액면분할) 전부 `ok`. 합성어 내부 일치(`거래소`·`증자`·`수수료`) 측정 결과는 계획서 「검색 재현율 측정 결과」절에 실제 색인 교차검증 수치까지 기록됨. |
+| 5 | 미집필 링크 14곳 「집필 예정」 | **PASS.** `grep -o 'planned-link' .vitepress/dist/part*/*.html \| wc -l` → **14**. |
+| 6 | 사이드바 39개, 활성 13개 | **PASS.** `npm test`의 `tests/unit/sidebar.test.js` — "39개 챕터가 전부 표시된다"(`total === 39`), "집필된 챕터만 link를 갖는다"(`linked.length === 13`) 모두 `ok`. |
+| 7 | 3단·다크모드·모바일 | **PASS.** 2026-08-05 사이트 소유자가 배포된 사이트에서 직접 확인 — mermaid 다크모드 연동, 3단 레이아웃, 375px 모바일 폭 모두 이상 없음. |
+| 8 | 정책 페이지 3개 푸터 연결 | **PASS.** 빌드 산출물 `dist/index.html`에서 `/about/privacy`, `/about/disclaimer`, `/about/contact` 세 링크 모두 확인. 배포된 사이트에서도 세 경로 전부 HTTP 200(Task 9 검증). 푸터는 공유 Layout에서 렌더되므로 모든 페이지에 구조적으로 존재(Task 7 확인). |
+| 9 | sitemap 완전성 | **PASS.** 배포된 사이트의 `sitemap.xml`이 17개 URL(13챕터 + 랜딩 1 + 정책 3) 전부 커스텀 도메인 기준으로 포함(Task 9 검증). `npm test`의 `tests/build/seo.test.js`도 sitemap 생성·미집필 챕터 제외를 확인. |
+
+**9개 전부 PASS.**
