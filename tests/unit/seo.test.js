@@ -74,7 +74,40 @@ test('JSON-LD에 Article과 BreadcrumbList가 들어간다', () => {
   assert.deepEqual(types, ['Article', 'BreadcrumbList'])
   const breadcrumb = data['@graph'][1].itemListElement
   assert.equal(breadcrumb.at(-1).name, '공매도란 무엇이고 왜 논란인가')
-  assert.equal(breadcrumb[1].name, '파트 2. 국내 주식시장 이해하기')
+})
+
+test('BreadcrumbList는 사이트 → 챕터 2단계이고 모든 ListItem에 item이 있다', () => {
+  // 파트 랜딩 페이지가 없으므로 파트 단계 노드를 만들지 않는다. Google은 마지막을
+  // 제외한 모든 ListItem에 item(URL)이 없으면 BreadcrumbList 전체를 무효로 본다.
+  const head = pageHead(chapterPage)
+  const script = head.find(([t, attrs]) => t === 'script' && attrs.type === 'application/ld+json')
+  const data = JSON.parse(script[2])
+  const breadcrumb = data['@graph'][1].itemListElement
+  assert.equal(breadcrumb.length, 2)
+  for (const item of breadcrumb) {
+    assert.ok(item.item, `ListItem position ${item.position}에 item이 없습니다`)
+  }
+})
+
+test('frontmatter에 title이 없어도 headline과 breadcrumb 마지막 항목이 비지 않는다', () => {
+  const head = pageHead({
+    relativePath: 'part2-korea-market/2-7-short-selling.md',
+    title: '공매도란 무엇이고 왜 논란인가 (VitePress 추출 제목)',
+    description: '설명',
+    frontmatter: {
+      description: '설명',
+      part: 2,
+      order: 7,
+      date: '2026-07-28'
+    }
+  })
+  const script = head.find(([t, attrs]) => t === 'script' && attrs.type === 'application/ld+json')
+  const data = JSON.parse(script[2])
+  assert.equal(data['@graph'][0].headline, '공매도란 무엇이고 왜 논란인가 (VitePress 추출 제목)')
+  assert.equal(
+    data['@graph'][1].itemListElement.at(-1).name,
+    '공매도란 무엇이고 왜 논란인가 (VitePress 추출 제목)'
+  )
 })
 
 test('챕터가 아닌 페이지는 og:type이 website고 JSON-LD가 없다', () => {

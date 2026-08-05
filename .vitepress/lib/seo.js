@@ -1,5 +1,4 @@
 import { SITE_URL, SITE_TITLE } from './site.js'
-import { PARTS } from './chapters.js'
 
 /** `part2-korea-market/2-7-short-selling.md` → 절대 URL */
 export function canonicalUrl(relativePath) {
@@ -14,29 +13,22 @@ function toDateString(value) {
   return s.slice(0, 10)
 }
 
-function articleGraph(pageData, url) {
+function articleGraph(pageData, url, title) {
   const { frontmatter: fm } = pageData
-  const part = PARTS.find((p) => p.part === fm.part)
 
+  // 파트 랜딩 페이지가 없으므로 중간 노드(파트)를 만들지 않는다 — 사이트 → 챕터 2단계.
+  // 중간 ListItem에 item(URL)이 없으면 Google이 BreadcrumbList 자체를 무효로 본다.
   const breadcrumb = [
-    { '@type': 'ListItem', position: 1, name: SITE_TITLE, item: `${SITE_URL}/` }
+    { '@type': 'ListItem', position: 1, name: SITE_TITLE, item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: title, item: url }
   ]
-  if (part) {
-    breadcrumb.push({ '@type': 'ListItem', position: 2, name: part.title })
-  }
-  breadcrumb.push({
-    '@type': 'ListItem',
-    position: breadcrumb.length + 1,
-    name: fm.title,
-    item: url
-  })
 
   return {
     '@context': 'https://schema.org',
     '@graph': [
       {
         '@type': 'Article',
-        headline: fm.title,
+        headline: title,
         description: fm.description,
         datePublished: toDateString(fm.date),
         inLanguage: 'ko-KR',
@@ -81,7 +73,7 @@ export function pageHead(pageData) {
     head.push([
       'script',
       { type: 'application/ld+json' },
-      JSON.stringify(articleGraph(pageData, url))
+      JSON.stringify(articleGraph(pageData, url, title))
     ])
   }
 
