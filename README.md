@@ -29,12 +29,12 @@
 
 ### 파트 3. 미국주식·해외투자
 
-- [ ] [3-1. 미국주식, 왜 하는가 — 국내주식과의 차이](part3-us-overseas/3-1-why-us-stocks.md)
-- [ ] [3-2. 미국주식 거래 시간과 프리마켓·애프터마켓](part3-us-overseas/3-2-us-trading-hours.md)
-- [ ] [3-3. 미국주식 세금 — 양도소득세 250만원 공제 이해하기](part3-us-overseas/3-3-us-stock-tax.md)
-- [ ] [3-4. 환율과 환전 — 환헤지 vs 환노출](part3-us-overseas/3-4-exchange-rate.md)
-- [ ] [3-5. S&P500·나스닥·다우 — 3대 지수 구분하기](part3-us-overseas/3-5-us-indices.md)
-- [ ] [3-6. 미국 배당주와 배당 성장 투자](part3-us-overseas/3-6-us-dividend-investing.md)
+- [x] [3-1. 미국주식, 왜 하는가 — 국내주식과의 차이](part3-us-overseas/3-1-why-us-stocks.md)
+- [x] [3-2. 미국주식 거래 시간과 프리마켓·애프터마켓](part3-us-overseas/3-2-us-trading-hours.md)
+- [x] [3-3. 미국주식 세금 — 양도소득세 250만원 공제 이해하기](part3-us-overseas/3-3-us-stock-tax.md)
+- [x] [3-4. 환율과 환전 — 환헤지 vs 환노출](part3-us-overseas/3-4-exchange-rate.md)
+- [x] [3-5. S&P500·나스닥·다우 — 3대 지수 구분하기](part3-us-overseas/3-5-us-indices.md)
+- [x] [3-6. 미국 배당주와 배당 성장 투자](part3-us-overseas/3-6-us-dividend-investing.md)
 
 ### 파트 4. ETF·펀드·연금으로 하는 투자
 
