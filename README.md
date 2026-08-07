@@ -38,7 +38,7 @@
 
 ### 파트 4. ETF·펀드·연금으로 하는 투자
 
-- [ ] [4-1. ETF란 무엇인가 — 펀드와 뭐가 다른가](part4-etf-pension/4-1-what-is-etf.md)
+- [x] [4-1. ETF란 무엇인가 — 펀드와 뭐가 다른가](part4-etf-pension/4-1-what-is-etf.md)
 - [ ] [4-2. 인덱스 투자 — 왜 "시장을 사라"고 하는가](part4-etf-pension/4-2-index-investing.md)
 - [ ] [4-3. ETF 고르는 법 — 운용보수, 괴리율, 추적오차](part4-etf-pension/4-3-how-to-choose-etf.md)
 - [ ] [4-4. 연금저축펀드 vs IRP — 세액공제 활용법](part4-etf-pension/4-4-pension-fund-vs-irp.md)
