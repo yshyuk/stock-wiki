@@ -40,7 +40,7 @@
 
 - [x] [4-1. ETF란 무엇인가 — 펀드와 뭐가 다른가](part4-etf-pension/4-1-what-is-etf.md)
 - [x] [4-2. 인덱스 투자 — 왜 "시장을 사라"고 하는가](part4-etf-pension/4-2-index-investing.md)
-- [ ] [4-3. ETF 고르는 법 — 운용보수, 괴리율, 추적오차](part4-etf-pension/4-3-how-to-choose-etf.md)
+- [x] [4-3. ETF 고르는 법 — 운용보수, 괴리율, 추적오차](part4-etf-pension/4-3-how-to-choose-etf.md)
 - [ ] [4-4. 연금저축펀드 vs IRP — 세액공제 활용법](part4-etf-pension/4-4-pension-fund-vs-irp.md)
 - [ ] [4-5. ISA 계좌, 왜 만능통장이라 부르나](part4-etf-pension/4-5-isa-account.md)
 - [ ] [4-6. 절세 계좌 3종 우선순위 — 뭐부터 채워야 하나](part4-etf-pension/4-6-tax-account-priority.md)
