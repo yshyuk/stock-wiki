@@ -43,7 +43,7 @@
 - [x] [4-3. ETF 고르는 법 — 운용보수, 괴리율, 추적오차](part4-etf-pension/4-3-how-to-choose-etf.md)
 - [x] [4-4. 연금저축펀드 vs IRP — 세액공제 활용법](part4-etf-pension/4-4-pension-fund-vs-irp.md)
 - [x] [4-5. ISA 계좌, 왜 만능통장이라 부르나](part4-etf-pension/4-5-isa-account.md)
-- [ ] [4-6. 절세 계좌 3종 우선순위 — 뭐부터 채워야 하나](part4-etf-pension/4-6-tax-account-priority.md)
+- [x] [4-6. 절세 계좌 3종 우선순위 — 뭐부터 채워야 하나](part4-etf-pension/4-6-tax-account-priority.md)
 
 ### 파트 5. 기업분석·재무제표 입문
 
