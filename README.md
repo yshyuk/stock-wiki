@@ -47,12 +47,12 @@
 
 ### 파트 5. 기업분석·재무제표 입문
 
-- [ ] [5-1. 재무제표, 어디서 보고 뭘 봐야 하나 (DART 사용법)](part5-analysis/5-1-how-to-read-dart.md)
-- [ ] [5-2. PER — 이 주식은 비싼가 싼가](part5-analysis/5-2-per.md)
-- [ ] [5-3. PBR과 ROE — 자산과 수익성으로 보는 기업](part5-analysis/5-3-pbr-roe.md)
-- [ ] [5-4. 매출·영업이익·순이익, 손익계산서 읽기](part5-analysis/5-4-income-statement.md)
-- [ ] [5-5. 부채비율과 유동비율 — 망하지 않을 회사 고르기](part5-analysis/5-5-debt-ratio.md)
-- [ ] [5-6. 가치평가의 한계 — 지표만 보면 안 되는 이유](part5-analysis/5-6-limits-of-valuation.md)
+- [x] [5-1. 재무제표, 어디서 보고 뭘 봐야 하나 (DART 사용법)](part5-analysis/5-1-how-to-read-dart.md)
+- [x] [5-2. PER — 이 주식은 비싼가 싼가](part5-analysis/5-2-per.md)
+- [x] [5-3. PBR과 ROE — 자산과 수익성으로 보는 기업](part5-analysis/5-3-pbr-roe.md)
+- [x] [5-4. 매출·영업이익·순이익, 손익계산서 읽기](part5-analysis/5-4-income-statement.md)
+- [x] [5-5. 부채비율과 유동비율 — 망하지 않을 회사 고르기](part5-analysis/5-5-debt-ratio.md)
+- [x] [5-6. 가치평가의 한계 — 지표만 보면 안 되는 이유](part5-analysis/5-6-limits-of-valuation.md)
 
 ### 파트 6. 알아두면 돈이 되는 투자 상식
 
