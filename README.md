@@ -56,13 +56,13 @@
 
 ### 파트 6. 알아두면 돈이 되는 투자 상식
 
-- [ ] [6-1. 금리와 주가의 관계 — 왜 금리가 오르면 주가가 떨어지나](part6-common-sense/6-1-interest-rate-and-stocks.md)
-- [ ] [6-2. 인플레이션과 투자 — 현금은 왜 녹는가](part6-common-sense/6-2-inflation.md)
-- [ ] [6-3. 분산투자와 포트폴리오 — 계란을 나눠 담는 법](part6-common-sense/6-3-diversification.md)
-- [ ] [6-4. 투자 심리 — 물타기, 손절, FOMO를 다루는 법](part6-common-sense/6-4-investor-psychology.md)
-- [ ] [6-5. 복리의 힘 — 장기투자가 유리한 수학적 이유](part6-common-sense/6-5-compound-interest.md)
-- [ ] [6-6. 경제 뉴스 읽는 법 — FOMC, CPI, 고용지표가 뭐길래](part6-common-sense/6-6-reading-economic-news.md)
-- [ ] [6-7. 흔한 투자 사기 유형과 피하는 법](part6-common-sense/6-7-investment-scams.md)
+- [x] [6-1. 금리와 주가의 관계 — 왜 금리가 오르면 주가가 떨어지나](part6-common-sense/6-1-interest-rate-and-stocks.md)
+- [x] [6-2. 인플레이션과 투자 — 현금은 왜 녹는가](part6-common-sense/6-2-inflation.md)
+- [x] [6-3. 분산투자와 포트폴리오 — 계란을 나눠 담는 법](part6-common-sense/6-3-diversification.md)
+- [x] [6-4. 투자 심리 — 물타기, 손절, FOMO를 다루는 법](part6-common-sense/6-4-investor-psychology.md)
+- [x] [6-5. 복리의 힘 — 장기투자가 유리한 수학적 이유](part6-common-sense/6-5-compound-interest.md)
+- [x] [6-6. 경제 뉴스 읽는 법 — FOMC, CPI, 고용지표가 뭐길래](part6-common-sense/6-6-reading-economic-news.md)
+- [x] [6-7. 흔한 투자 사기 유형과 피하는 법](part6-common-sense/6-7-investment-scams.md)
 
 ### 파트 7. 투자 트렌드 (수시 업데이트)
 
