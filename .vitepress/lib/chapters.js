@@ -53,5 +53,5 @@ export const CHAPTERS = [
   { part: 6, order: 6, title: '경제 뉴스 읽는 법', file: 'part6-common-sense/6-6-reading-economic-news.md' },
   { part: 6, order: 7, title: '흔한 투자 사기 유형과 피하는 법', file: 'part6-common-sense/6-7-investment-scams.md' },
 
-  { part: 7, order: 1, title: '2026년 하반기 시장 트렌드 총정리', file: 'part7-trends/2026-h2-market-trends.md' }
+  { part: 7, order: 1, title: '2026년 하반기 시장 지형 (2026년 8월 기준)', file: 'part7-trends/2026-h2-market-trends.md' }
 ]
