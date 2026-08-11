@@ -17,10 +17,10 @@ test('파트 7개가 모두 그룹으로 나온다', () => {
   assert.equal(sidebar[0].text, '파트 1. 주식 투자, 처음이라면')
 })
 
-test('39개 챕터가 전부 표시된다', () => {
+test('40개 챕터가 전부 표시된다', () => {
   const sidebar = buildSidebar({ root: ROOT, exists, listDir: () => [] })
   const total = sidebar.reduce((n, group) => n + group.items.length, 0)
-  assert.equal(total, 39)
+  assert.equal(total, 40)
 })
 
 test('집필된 챕터만 link를 갖는다', () => {
