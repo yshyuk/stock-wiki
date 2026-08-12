@@ -8,9 +8,15 @@ const ROOT = new URL('../../', import.meta.url).pathname
 // 그 파트를 보지 못한 채 예전 13개 챕터만으로 재측정 결과를 만들어 낸다.
 const PART_DIRS = PARTS.map((p) => p.dir)
 
-/** VitePress 로컬 검색의 기본 searchOptions (VPLocalSearchBox.vue 기준) */
+/**
+ * 실제 사이트의 searchOptions를 모사한다.
+ * VPLocalSearchBox.vue의 기본값 위에 `.vitepress/config.js`의
+ * `search.options.miniSearch.searchOptions`가 덮이는 구조라 그 결과를 여기 적는다.
+ * ⚠️ 한쪽만 고치면 측정이 사이트와 어긋난다. 반드시 두 곳을 함께 고칠 것.
+ */
 export const SEARCH_OPTIONS = {
-  fuzzy: 0.2,
+  fuzzy: 0.1, // 기본값 0.2 → 0.1 (config.js에서 덮어씀). 이유는 그쪽 주석 참고
+
   prefix: true,
   boost: { title: 4, text: 2, titles: 1 }
 }

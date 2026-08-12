@@ -65,6 +65,15 @@ export default withMermaid(defineConfig({
       provider: 'local',
       options: {
         _render: renderForSearch,
+        // fuzzy 기본값 0.2는 `나스닥`↔`코스닥`을 섞는다. MiniSearch의 허용 편집거리는
+        // round(글자수 × fuzzy)이므로 0.2는 세 글자 질의에도 거리 1을 허용한다.
+        // 0.1로 낮추면 네 글자 이하는 정확·prefix 일치만 남고, 다섯 글자 이상은
+        // 거리 1이 그대로 유지된다(`조각투자란`→`조각투자`가 계속 걸린다).
+        // 매칭 집합이 기존의 부분집합이라 새 오탐이 생길 수 없다.
+        // ⚠️ 이 값을 바꾸면 tests/helpers/search-index.js의 SEARCH_OPTIONS도 함께 고칠 것.
+        miniSearch: {
+          searchOptions: { fuzzy: 0.1 }
+        },
         translations: {
           button: { buttonText: '검색', buttonAriaLabel: '검색' },
           modal: {
