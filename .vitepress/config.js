@@ -39,7 +39,18 @@ export default withMermaid(defineConfig({
         ]
       : []),
     ['meta', { name: 'robots', content: 'index, follow' }],
-    ['meta', { name: 'format-detection', content: 'telephone=no' }]
+    ['meta', { name: 'format-detection', content: 'telephone=no' }],
+
+    // 파비콘 — .ico를 먼저 두어 구형 브라우저가 집고, svg를 지원하는 브라우저는
+    // 뒤의 선언을 우선한다(선명하고 다크모드에서도 같은 색으로 보인다).
+    ['link', { rel: 'icon', href: '/favicon.ico', sizes: '48x48' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+    // iOS는 자체 둥근 마스크를 씌우므로 이 PNG만 모서리가 각진 변형이다.
+    ['link', { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' }],
+    // 안드로이드 홈화면 추가용. icon-192/512가 여기서만 참조되므로 이 줄을 지우면
+    // 두 파일이 고아가 된다 — 함께 지울 것.
+    ['link', { rel: 'manifest', href: '/site.webmanifest' }],
+    ['meta', { name: 'theme-color', content: '#3451b2' }]
   ],
 
   themeConfig: {

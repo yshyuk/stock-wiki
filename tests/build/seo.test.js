@@ -71,3 +71,31 @@ test('챕터 페이지에 JSON-LD가 있고 파싱된다', () => {
   assert.equal(data['@graph'][0]['@type'], 'Article')
   assert.equal(data['@graph'][0].datePublished, '2026-07-28')
 })
+
+test('아이콘·공유 이미지 정적 파일이 산출물에 있다', () => {
+  // public/의 파일이 조용히 사라지면 파비콘과 SNS 썸네일이 함께 죽는데,
+  // 화면상으로는 눈치채기 어려워 여기서 잡는다.
+  for (const f of [
+    'favicon.ico',
+    'favicon.svg',
+    'apple-touch-icon.png',
+    'icon-192.png',
+    'icon-512.png',
+    'og-image.png',
+    'site.webmanifest'
+  ]) {
+    assert.ok(existsSync(join(DIST, f)), `${f}가 산출물에 없습니다`)
+  }
+})
+
+test('챕터 페이지에 파비콘과 og:image가 붙는다', () => {
+  const html = readFileSync(CHAPTER, 'utf8')
+  assert.match(html, /<link rel="icon" type="image\/svg\+xml" href="\/favicon\.svg">/)
+  assert.match(html, /<link rel="apple-touch-icon" href="\/apple-touch-icon\.png">/)
+  // og:image는 절대 URL이어야 한다. 상대 경로면 공유 썸네일이 안 뜬다.
+  assert.match(
+    html,
+    /<meta property="og:image" content="https:\/\/digestive-coffee\.com\/og-image\.png">/
+  )
+  assert.match(html, /<meta name="twitter:card" content="summary_large_image">/)
+})

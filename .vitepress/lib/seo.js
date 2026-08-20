@@ -1,5 +1,8 @@
 import { SITE_URL, SITE_TITLE } from './site.js'
 
+/** SNS 공유 썸네일. 페이지마다 따로 만들지 않고 사이트 대표 한 장을 공유한다. */
+const OG_IMAGE = `${SITE_URL}/og-image.png`
+
 /** `part2-korea-market/2-7-short-selling.md` → 절대 URL */
 export function canonicalUrl(relativePath) {
   const path = relativePath.replace(/\.md$/, '').replace(/(^|\/)index$/, '$1')
@@ -60,9 +63,16 @@ export function pageHead(pageData) {
     ['meta', { property: 'og:url', content: url }],
     ['meta', { property: 'og:title', content: title }],
     ['meta', { property: 'og:description', content: description }],
-    ['meta', { name: 'twitter:card', content: 'summary' }],
+    // og:image는 절대 URL이어야 한다 — 크롤러가 상대 경로를 해석하지 않는 곳이 있다.
+    ['meta', { property: 'og:image', content: OG_IMAGE }],
+    ['meta', { property: 'og:image:width', content: '1200' }],
+    ['meta', { property: 'og:image:height', content: '630' }],
+    ['meta', { property: 'og:image:alt', content: SITE_TITLE }],
+    // 이미지가 있으므로 큰 카드를 쓴다. 이미지 없이 이 값을 쓰면 카드가 깨진다.
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:title', content: title }],
-    ['meta', { name: 'twitter:description', content: description }]
+    ['meta', { name: 'twitter:description', content: description }],
+    ['meta', { name: 'twitter:image', content: OG_IMAGE }]
   ]
 
   if (isChapter && fm.date) {
