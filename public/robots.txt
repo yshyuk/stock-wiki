@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://stock-wiki.digestive-coffee.blog/sitemap.xml
+Sitemap: https://digestive-coffee.com/sitemap.xml

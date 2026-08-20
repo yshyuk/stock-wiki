@@ -16,10 +16,10 @@ test('sitemap.xml이 생성된다', () => {
   // 리터럴은 의도적이다. SITE_URL을 import해 조립하면 상수가 잘못 바뀌어도
   // 기대값이 함께 움직여 동어반복이 되어 아무것도 검증하지 못한다.
   for (const url of [
-    'https://stock-wiki.digestive-coffee.blog/part2-korea-market/2-7-short-selling',
-    'https://stock-wiki.digestive-coffee.blog/about/privacy',
-    'https://stock-wiki.digestive-coffee.blog/about/disclaimer',
-    'https://stock-wiki.digestive-coffee.blog/about/contact'
+    'https://digestive-coffee.com/part2-korea-market/2-7-short-selling',
+    'https://digestive-coffee.com/about/privacy',
+    'https://digestive-coffee.com/about/disclaimer',
+    'https://digestive-coffee.com/about/contact'
   ]) {
     assert.ok(xml.includes(url), `sitemap에 ${url}이 없습니다`)
   }
@@ -32,7 +32,7 @@ test('sitemap은 원고가 있는 챕터만 담고, 없는 챕터는 담지 않�
   const mismatches = []
   for (const chapter of CHAPTERS) {
     const mdExists = existsSync(join(ROOT, chapter.file))
-    const url = `https://stock-wiki.digestive-coffee.blog/${chapter.file.replace(/\.md$/, '')}`
+    const url = `https://digestive-coffee.com/${chapter.file.replace(/\.md$/, '')}`
     const inSitemap = xml.includes(url)
     if (mdExists !== inSitemap) {
       mismatches.push(`${chapter.file}: 원고 존재=${mdExists}, sitemap 포함=${inSitemap}`)
@@ -43,14 +43,14 @@ test('sitemap은 원고가 있는 챕터만 담고, 없는 챕터는 담지 않�
 
 test('robots.txt가 sitemap을 가리킨다', () => {
   const txt = readFileSync(join(DIST, 'robots.txt'), 'utf8')
-  assert.match(txt, /Sitemap: https:\/\/stock-wiki\.digestive-coffee\.blog\/sitemap\.xml/)
+  assert.match(txt, /Sitemap: https:\/\/digestive-coffee\.com\/sitemap\.xml/)
 })
 
 test('챕터 페이지에 canonical과 og 태그가 있다', () => {
   const html = readFileSync(CHAPTER, 'utf8')
   assert.match(
     html,
-    /<link rel="canonical" href="https:\/\/stock-wiki\.digestive-coffee\.blog\/part2-korea-market\/2-7-short-selling">/
+    /<link rel="canonical" href="https:\/\/digestive-coffee\.com\/part2-korea-market\/2-7-short-selling">/
   )
   assert.match(html, /property="og:type" content="article"/)
   assert.match(html, /property="og:locale" content="ko_KR"/)
