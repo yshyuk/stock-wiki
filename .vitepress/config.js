@@ -56,16 +56,30 @@ export default withMermaid(defineConfig({
   themeConfig: {
     nav: [
       { text: '목차', link: '/part1-basics/1-1-what-is-stock' },
-      { text: '이 책은', link: '/about/disclaimer' }
+      { text: '이 책은', link: '/about/' }
     ],
 
     footer: {
       message:
-        '<a href="/about/privacy">개인정보처리방침</a> · <a href="/about/disclaimer">면책조항</a> · <a href="/about/contact">문의</a>',
+        '<a href="/about/">소개</a> · <a href="/about/privacy">개인정보처리방침</a> · <a href="/about/disclaimer">면책조항</a> · <a href="/about/contact">문의</a>',
       copyright: '이 사이트의 글은 투자 권유가 아니에요. 제도와 세금은 바뀔 수 있어요.'
     },
 
-    sidebar: buildSidebar({ root: ROOT }),
+    // 파트 목차 뒤에 사이트 안내 페이지를 한 묶음 붙인다. nav·footer에도 있지만
+    // 모바일에서는 목차가 유일한 탐색 수단이라 여기서도 닿게 한다.
+    sidebar: [
+      ...buildSidebar({ root: ROOT }),
+      {
+        text: '이 사이트',
+        collapsed: true,
+        items: [
+          { text: '소개', link: '/about/' },
+          { text: '면책조항', link: '/about/disclaimer' },
+          { text: '개인정보처리방침', link: '/about/privacy' },
+          { text: '문의', link: '/about/contact' }
+        ]
+      }
+    ],
     outline: { level: [2, 3], label: '이 페이지' },
     docFooter: { prev: '이전', next: '다음' },
     darkModeSwitchLabel: '다크 모드',

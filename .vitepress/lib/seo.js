@@ -1,4 +1,4 @@
-import { SITE_URL, SITE_TITLE } from './site.js'
+import { SITE_URL, SITE_TITLE, AUTHOR_NAME, AUTHOR_URL } from './site.js'
 
 /** SNS 공유 썸네일. 페이지마다 따로 만들지 않고 사이트 대표 한 장을 공유한다. */
 const OG_IMAGE = `${SITE_URL}/og-image.png`
@@ -34,6 +34,11 @@ function articleGraph(pageData, url, title) {
         headline: title,
         description: fm.description,
         datePublished: toDateString(fm.date),
+        // 수정일이 없으면 작성일을 그대로 쓴다. Google은 dateModified가 빠진 Article을
+        // 갱신 이력이 없는 글로 보는데, 그건 사실이므로 작성일과 같게 두는 것이 맞다.
+        dateModified: toDateString(fm.updated) ?? toDateString(fm.date),
+        author: { '@type': 'Person', name: AUTHOR_NAME, url: AUTHOR_URL },
+        publisher: { '@type': 'Organization', name: SITE_TITLE, url: `${SITE_URL}/` },
         inLanguage: 'ko-KR',
         mainEntityOfPage: url,
         isPartOf: { '@type': 'Book', name: SITE_TITLE, url: `${SITE_URL}/` },
@@ -77,6 +82,12 @@ export function pageHead(pageData) {
 
   if (isChapter && fm.date) {
     head.push(['meta', { property: 'article:published_time', content: toDateString(fm.date) }])
+  }
+  if (isChapter && fm.updated) {
+    head.push(['meta', { property: 'article:modified_time', content: toDateString(fm.updated) }])
+  }
+  if (isChapter) {
+    head.push(['meta', { name: 'author', content: AUTHOR_NAME }])
   }
 
   if (isChapter) {

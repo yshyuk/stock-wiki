@@ -22,3 +22,23 @@
 .vp-doc .mermaid {
   overflow-x: auto;
 }
+
+/* 챕터 제목 위의 「글쓴이 · 작성일 · 수정일」 줄 */
+.chapter-meta {
+  margin: 0 0 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--vp-c-text-2);
+}
+
+.chapter-meta__item + .chapter-meta__item::before {
+  content: '·';
+  margin: 0 6px;
+  color: var(--vp-c-text-3);
+}
+
+.chapter-meta a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

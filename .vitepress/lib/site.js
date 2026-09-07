@@ -3,6 +3,11 @@ export const SITE_TITLE = '주식·투자 상식 사전'
 export const SITE_DESCRIPTION =
   '증권계좌 개설부터 ETF·연금까지, 주식 투자에 필요한 상식을 검색 질문 하나에 하나씩 답하는 온라인 책이에요.'
 
+// 글쓴이 표기. 챕터 제목 아래의 메타 줄과 JSON-LD의 author에 같은 값을 쓴다.
+// 소개 페이지(about/index.md)의 「누가 쓰나요」 절과 표기를 맞출 것.
+export const AUTHOR_NAME = 'yshyuk'
+export const AUTHOR_URL = `${SITE_URL}/about/`
+
 // 애드센스 발행자 ID는 'ca-pub-8084693884500389'이다(public/ads.txt 참고).
 // ⚠️ 그런데 아직 채우지 마라. 지금 채우면 광고가 나오는 게 아니라 빈 슬롯이 뜬다 —
 // AdSlot.vue에 data-ad-slot(광고 단위 ID)이 없기 때문이다. 상세는 그쪽 상단 주석.

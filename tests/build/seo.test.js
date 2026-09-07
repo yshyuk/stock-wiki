@@ -17,6 +17,7 @@ test('sitemap.xml이 생성된다', () => {
   // 기대값이 함께 움직여 동어반복이 되어 아무것도 검증하지 못한다.
   for (const url of [
     'https://digestive-coffee.com/part2-korea-market/2-7-short-selling',
+    'https://digestive-coffee.com/about/',
     'https://digestive-coffee.com/about/privacy',
     'https://digestive-coffee.com/about/disclaimer',
     'https://digestive-coffee.com/about/contact'
@@ -98,4 +99,19 @@ test('챕터 페이지에 파비콘과 og:image가 붙는다', () => {
     /<meta property="og:image" content="https:\/\/digestive-coffee\.com\/og-image\.png">/
   )
   assert.match(html, /<meta name="twitter:card" content="summary_large_image">/)
+})
+
+test('챕터 페이지 화면에 글쓴이와 작성일이 보인다', () => {
+  // 심사관과 검색엔진이 보는 것은 JSON-LD가 아니라 렌더된 HTML이다.
+  // 메타 줄이 조용히 빠지면 "누가 언제 쓴 글인지 모르는 페이지"로 돌아간다.
+  const html = readFileSync(CHAPTER, 'utf8')
+  assert.match(html, /<p class="chapter-meta">/)
+  assert.match(html, /글쓴이\s*<a href="\/about\/">yshyuk<\/a>/)
+  assert.match(html, /<time datetime="2026-07-28">2026-07-28<\/time>/)
+})
+
+test('소개 페이지가 빌드되고 nav·footer에서 링크된다', () => {
+  assert.ok(existsSync(join(DIST, 'about/index.html')), 'about/index.html이 없습니다')
+  const html = readFileSync(CHAPTER, 'utf8')
+  assert.match(html, /href="\/about\/"/)
 })

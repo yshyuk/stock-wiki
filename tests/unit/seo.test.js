@@ -110,6 +110,35 @@ test('frontmatter에 title이 없어도 headline과 breadcrumb 마지막 항목�
   )
 })
 
+test('JSON-LD Article에 author·publisher·dateModified가 있다', () => {
+  const head = pageHead(chapterPage)
+  const script = head.find(([t, attrs]) => t === 'script' && attrs.type === 'application/ld+json')
+  const article = JSON.parse(script[2])['@graph'][0]
+  assert.equal(article.author['@type'], 'Person')
+  assert.equal(article.author.name, 'yshyuk')
+  assert.equal(article.author.url, `${SITE_URL}/about/`)
+  assert.equal(article.publisher['@type'], 'Organization')
+  // updated가 없으면 dateModified는 작성일과 같다 — 갱신 이력이 없다는 사실 그대로.
+  assert.equal(article.dateModified, '2026-07-28')
+  assert.equal(findTag(head, 'meta', 'name', 'author')[1].content, 'yshyuk')
+  assert.equal(findTag(head, 'meta', 'property', 'article:modified_time'), undefined)
+})
+
+test('frontmatter updated가 있으면 dateModified와 article:modified_time에 반영된다', () => {
+  const head = pageHead({
+    ...chapterPage,
+    frontmatter: { ...chapterPage.frontmatter, updated: '2026-09-07' }
+  })
+  const script = head.find(([t, attrs]) => t === 'script' && attrs.type === 'application/ld+json')
+  const article = JSON.parse(script[2])['@graph'][0]
+  assert.equal(article.datePublished, '2026-07-28')
+  assert.equal(article.dateModified, '2026-09-07')
+  assert.equal(
+    findTag(head, 'meta', 'property', 'article:modified_time')[1].content,
+    '2026-09-07'
+  )
+})
+
 test('챕터가 아닌 페이지는 og:type이 website고 JSON-LD가 없다', () => {
   const head = pageHead({
     relativePath: 'about/privacy.md',
