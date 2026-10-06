@@ -54,5 +54,6 @@ export const CHAPTERS = [
   { part: 6, order: 7, title: '흔한 투자 사기 유형과 피하는 법', file: 'part6-common-sense/6-7-investment-scams.md' },
 
   { part: 7, order: 1, title: '2026년 하반기 시장 지형 (2026년 8월 기준)', file: 'part7-trends/2026-h2-market-trends.md' },
-  { part: 7, order: 2, title: '조각투자와 토큰증권 제도 현황 (2026년 8월 기준)', file: 'part7-trends/2026-fractional-investment-sto.md' }
+  { part: 7, order: 2, title: '조각투자와 토큰증권 제도 현황 (2026년 8월 기준)', file: 'part7-trends/2026-fractional-investment-sto.md' },
+  { part: 7, order: 3, title: '공모주 코너스톤투자자 제도 (2026년 10월 기준)', file: 'part7-trends/2026-cornerstone-investor-ipo.md' }
 ]
