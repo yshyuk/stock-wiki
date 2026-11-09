@@ -42,3 +42,19 @@
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+
+/* 글 끝의 소개·정책 링크. 전역 footer가 숨겨지는 글 페이지 전용이다. */
+.doc-site-links {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--vp-c-divider);
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--vp-c-text-2);
+}
+
+.doc-site-links a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

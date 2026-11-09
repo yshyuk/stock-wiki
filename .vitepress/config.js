@@ -128,6 +128,13 @@ export default withMermaid(defineConfig({
     }
   },
 
+  // mermaid는 문법 오류뿐 아니라 차트 청크 로딩·그리기 실패까지 전부 같은
+  // 「Syntax error in text」 화면으로 그린다(배포 직후 옛 해시 청크, 네트워크 차단 등).
+  // 독자에게 오류 화면 대신 빈 자리를 남기고, 도표 내용은 주변 본문이 설명한다.
+  mermaid: {
+    suppressErrorRendering: true
+  },
+
   sitemap: {
     hostname: SITE_URL
   },
